@@ -2,16 +2,13 @@ package reverseProxy;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.util.ReferenceCountUtil;
-
-import java.nio.ByteBuffer;
+import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.http.HttpObject;
 
 /**
  * some code by shaf on 6/25/17.
  */
-public class TargetHandler extends ChannelInboundHandlerAdapter {
-
+public class TargetHandler extends SimpleChannelInboundHandler<HttpObject> {
     ContentQueue contentQueue;
     Channel sourceChannel;
 
@@ -21,8 +18,7 @@ public class TargetHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, HttpObject msg) throws Exception {
         sourceChannel.writeAndFlush(msg);
-//        ReferenceCountUtil.release(msg);
     }
 }

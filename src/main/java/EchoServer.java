@@ -6,12 +6,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpServerCodec;
-import io.netty.handler.codec.http.cors.CorsConfig;
-import io.netty.handler.codec.http.cors.CorsHandler;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
-import io.netty.handler.stream.ChunkedWriteHandler;
-import io.netty.util.internal.logging.InternalLogLevel;
 
 import java.net.InetSocketAddress;
 
@@ -36,7 +30,7 @@ public class EchoServer {
                             ch.pipeline().addLast(new HttpServerCodec());
                         }
                     });
-            ChannelFuture f = b.bind("localhost", 9000).sync();
+            ChannelFuture f = b.bind("localhost", 8688).sync();
             System.out.println(EchoServer.class.getName() + " started and listen on " + f.channel().localAddress());
             f.channel().closeFuture().sync();
         } finally {
