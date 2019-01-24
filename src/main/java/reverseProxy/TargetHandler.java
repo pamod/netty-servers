@@ -18,6 +18,11 @@ public class TargetHandler extends SimpleChannelInboundHandler<HttpObject> {
     }
 
     @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) {
+        ctx.flush();
+    }
+
+    @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, HttpObject msg) throws Exception {
         sourceChannel.writeAndFlush(msg);
     }

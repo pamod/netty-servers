@@ -15,8 +15,8 @@ import java.net.InetSocketAddress;
 public class RPServer {
 
     private final ChannelGroup channelGroup = new DefaultChannelGroup(ImmediateEventExecutor.INSTANCE);
-    private final EventLoopGroup parent = new NioEventLoopGroup(4);
-    private final EventLoopGroup childe = new NioEventLoopGroup(8);
+    private final EventLoopGroup parent = new NioEventLoopGroup(600);
+    private final EventLoopGroup childe = new NioEventLoopGroup(800);
 
     private Channel channel;
 
