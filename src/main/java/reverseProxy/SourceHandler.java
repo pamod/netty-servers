@@ -17,6 +17,7 @@ public class SourceHandler extends ChannelInboundHandlerAdapter {
     ContentQueue contentQueue;
     ChannelFuture connectFuture;
     Channel targetChannel;
+    Bootstrap bootstrap;
 
     public SourceHandler(ContentQueue contentQueue) {
         this.contentQueue = contentQueue;
@@ -33,12 +34,21 @@ public class SourceHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx)
             throws Exception {
-        Bootstrap bootstrap = new Bootstrap();
+        bootstrap = new Bootstrap();
         bootstrap.channel(NioSocketChannel.class)
                 .handler(new TargetChannelInitializer(this.contentQueue, ctx.channel()));
         bootstrap.group(ctx.channel().eventLoop());
         connectFuture = bootstrap.connect(new InetSocketAddress("localhost", 8688));
         connectFuture.addListener(new SourceHandlerListener(this.contentQueue, this));
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        super.channelInactive(ctx);
+        connectFuture.channel().eventLoop().shutdownGracefully();
+        bootstrap = null;
+//        connectFuture.channel().close();
+
     }
 
     public void setTargetChannel(Channel targetChannel) {
